@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -41,14 +42,15 @@ public class RegisterServlet extends HttpServlet {
             AuthService as = new AuthService();
             cusID =  as.registerNewCustomer(customer);
             if(cusID>1){
-                System.out.println("注册成功");
-
+                System.out.println("注册成功,用户ID:"+cusID);
                 request.setAttribute("cid",cusID);
+                HttpSession session = request.getSession(true);
+                session.setAttribute("cid",cusID);
                 RequestDispatcher rd = request.getRequestDispatcher("/showUser");
                 rd.forward(request,response);
             }
         }else{
-            response.sendRedirect("/errorReg.jsp");
+            response.sendRedirect("/errorJsp/errorReg.jsp");
         }
 
 

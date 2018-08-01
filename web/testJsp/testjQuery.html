@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery</title>
+    <style>
+        .p3{
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="div1">div</div>
+<p id="p1">p1</p>
+<p id="p2">p2</p>
+<p class="p3">p3</p>
+<button id="btn1">button1</button>
+<button>button2</button>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#btn1").click(function () {
+            $("#div1").hide();
+        })
+    })
+
+</script>
+
+</html>

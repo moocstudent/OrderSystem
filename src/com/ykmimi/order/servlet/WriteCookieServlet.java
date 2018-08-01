@@ -35,13 +35,13 @@ public class WriteCookieServlet extends HttpServlet {
             ///// * Dao出错 , 跳至出错提示页面,再返回首页
         } else if (cid == 0) {
             System.out.println("此用户不存在.");
-            response.sendRedirect("/error.jsp");
+            response.sendRedirect("/errorJsp/error.jsp");
 //			RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
 //			rd.forward(request, response);
             ///// * 进行了DB的查询,但无此用户,跳至提示页面,再返回首页
         } else {
             ///// * 未知错误
-            response.sendRedirect("/errorMessage.jsp");
+            response.sendRedirect("/errorJsp/errorMessage.jsp");
             System.out.println("未知错误!");
         }
 

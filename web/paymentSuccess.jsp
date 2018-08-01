@@ -28,3 +28,6 @@
 <%=request.getRequestURL()%>
 </body>
 </html>
+<%--在使用<%的时候如果是一个实例或者数值型数据则结尾加;号--%>
+<%--<% request.getAttribute("showOrder") ;%> --%>
+<%--<% if(3>2){}%>--%>

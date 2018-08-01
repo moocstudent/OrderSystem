@@ -11,8 +11,8 @@
 <h2>魔偶小餐馆</h2>
 <p>	请登陆 </p>
 <form action="/login" method="post">
-<font>用户名:</font> <input type="text" name="log_username"> <br>
-<font>密码:</font> <input type="password" name="log_password"><br>
+用户名: <input type="text" name="log_username"> <br>
+密码: <input type="password" name="log_password"><br>
 <input type="submit" value="提交">
 
 </form>

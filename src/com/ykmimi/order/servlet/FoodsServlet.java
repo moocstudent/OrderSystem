@@ -25,6 +25,11 @@ public class FoodsServlet extends HttpServlet {
         ArrayList<Foods> foodsList = fs.getAllFoodsInfo();
         request.setAttribute("foodslist",foodsList);
 
+//        //获取用户实例
+//        Customers customer = null;
+//        HttpSession session = request.getSession(false);
+//        customer = (Customers)session.getAttribute("customer");
+//        System.out.println("FoodsServlet:"+customer);
 
         RequestDispatcher rd = request.getRequestDispatcher("/foods.jsp");
         rd.forward(request,response);//加油 坚持就是胜利
@@ -32,6 +37,7 @@ public class FoodsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request,response);
+        //*如果当这里不设置doPost...当用户在用户界面跳转点餐后,将无法进入该Servlet
     }
 }

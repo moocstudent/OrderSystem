@@ -41,7 +41,7 @@ public class CartsService {
     }///// createCart END
 
 
-    /////* 创建新购物车,返回购物车ID
+    /////* 创建新购物车,返回购物车ID ,for循环将food_id,和food_numbers传入Dao
     public long createNewCart(long customer_id, ArrayList<Long> food_id, ArrayList<Integer> food_numbers) {
         Connection conn = null;
         long cartID = 0;//购物车ID
@@ -50,9 +50,14 @@ public class CartsService {
             for (int i = 0; i < food_id.size(); i++) {
                 conn.setAutoCommit(false);
                 cartID = cd.insertNewCart(customer_id, food_id.get(i), food_numbers.get(i));
+                if (cartID==-1){
+                    //如果返回-1,则是Dao的insert出错,插入数据失败了
+                    return -1;
+                }
                 conn.commit();
             }
         } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
             if (conn != null) {
                 try {
                     conn.rollback();

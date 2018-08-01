@@ -104,8 +104,110 @@ public class AuthDao {
 			return insertState;
 		}
 
+	}//* End insertNewCustomer
+
+
+	/////* 更改用户余额 返回1(更改成功)或0(更改失败)
+	public int changeBalance(long customerID,double money) throws SQLException, ClassNotFoundException {
+		int insertState = 0;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "update Customers set customer_balance = customer_balance + ? where Customers.customer_id = ?";
+		try {
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setDouble(1, money);
+			ps.setLong(2, customerID);
+			insertState = ps.executeUpdate();
+		}finally {
+			JDBCUtil.close(null,ps,null);
+		}
+		return insertState;
+	}//* End changeBalance
+
+	/////*通过用户ID查询用户余额
+	public double[] queryBalanceByID(long cid) throws SQLException, ClassNotFoundException {
+		double[] queryStateAndMoney = new double[2];
+		queryStateAndMoney[0] = 0;
+		queryStateAndMoney[1] = 0;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "select customer_balance from Customers where customer_id = ?";
+		try {
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1,cid);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				queryStateAndMoney[0] = 1;
+				queryStateAndMoney[1] = rs.getDouble(1);
+			}
+		}finally {
+			JDBCUtil.close(rs,ps,null);
+		}
+		return  queryStateAndMoney;
 	}
-	
-	
-	
+
+	/////* 通过ID更改用户实名
+	public int updataTruenameByID(long cid,  String change_truename) throws SQLException, ClassNotFoundException {
+		int updateState = 0;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "update Customers set customer_truename = ? where customer_id = ?";
+		try {
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, change_truename);
+			ps.setLong(2, cid);
+			updateState = ps.executeUpdate();
+		}finally {
+			JDBCUtil.close(null,ps,null);
+		}
+		return updateState;
+	}
+
+	/////* 通过ID更改用户地址
+	public int updataAddressByID(long cid, String address) throws SQLException, ClassNotFoundException {
+		int updateState = 0;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "update Customers set customer_address = ? where customer_id = ?";
+		try {
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, address);
+			ps.setLong(2, cid);
+			updateState = ps.executeUpdate();
+		}finally {
+			JDBCUtil.close(null,ps,null);
+		}
+		return updateState;
+	}
+
+	/////* 通过ID更改用户电话
+	public int updataPhoneByID(long cid,long phoneNumber) throws SQLException, ClassNotFoundException {
+		int updateState = 0;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		String sql = "update Customers set customer_phone = ? where customer_id = ?";
+		try {
+			conn = JDBCUtil.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1, phoneNumber);
+			ps.setLong(2, cid);
+			updateState = ps.executeUpdate();
+		}finally {
+			JDBCUtil.close(null,ps,null);
+		}
+		return updateState;
+	}
+
+	/////* 更改用户信息之更改用户实名
+
+//	public int setPrepared(){
+//
+//	}
+
+
 }

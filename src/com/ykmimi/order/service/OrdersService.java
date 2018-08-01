@@ -72,7 +72,7 @@ public class OrdersService {
             e.printStackTrace();
             if (conn != null) {
                 try {
-                    conn.rollback();
+                    conn.rollback();//事务回滚
                     return -2;
                 } catch (SQLException e1) {
                     e1.printStackTrace();

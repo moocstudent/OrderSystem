@@ -1,5 +1,6 @@
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="com.ykmimi.order.entity.Foods" %><%--
+<%@ page import="com.ykmimi.order.entity.Foods" %>
+<%@ page import="com.ykmimi.order.entity.Customers" %><%--
   Created by IntelliJ IDEA.
   User: SeeClanUkyo
   Date: 2018/07/19
@@ -13,6 +14,10 @@
     <%@include file="bootstrap.jsp" %>
 </head>
 <body>
+<%if(session.getAttribute("customer")!=null){%>
+   <%Customers customer = (Customers)session.getAttribute("customer");%>
+您好,<%=customer.getCustomer_truename()%>,请选取您要点的套餐及数量!💗
+<%}%>
 <p>食品列表</p>
 <form action="/order" method="post">
     <% if (request.getAttribute("foodslist") == null) {%>
@@ -72,33 +77,8 @@
 
     <%}%>
 </form>
-<% if (request.getAttribute("totalPrice") != null && (double) request.getAttribute("totalPrice") > 0.0) {%>
-<% if (request.getAttribute("foodIDList") != null && (request.getAttribute("foodNumbersList") != null)) {%>
-<%
-    ArrayList<Long> foodIDList = (ArrayList<Long>) request.getAttribute("foodIDList");
-    ArrayList<Integer> foodNumbersList = (ArrayList<Integer>) request.getAttribute("foodNumbersList");
-%>
-<% if (request.getAttribute("orderID") != null) {%>
-订单号:<%=request.getAttribute("orderID")%> <br>
-订单内容: <br>
-<%}%>
-<% for (int i = 0; i < foodIDList.size(); i++) {%>
-套餐ID: <%=foodIDList.get(i)%> 数量: <%=foodNumbersList.get(i)%>
-金额: <%=request.getAttribute("price_".concat(foodIDList.get(i) + ""))%>
-<br>
-<% Thread.sleep(1200);%>
-<%}%>
-<h2>
-    <mark>订单总金额:<%=request.getAttribute("totalPrice")%>
-    </mark>
-</h2>
-<%}%>
-<form action="/pay" method="post">
-    <input type="hidden" name="orderID_in" value="<%=request.getAttribute("orderID")%>">
-    <input type="hidden" name="cartID_in" value="<%=request.getAttribute("cartID")%>">
-    <input type="submit" value="付款">
-</form>
-<%}%>
+
+
 
 <hr>
 bug: <br>
@@ -108,6 +88,7 @@ bug: <br>
 <br>
 <%--展示当前路径--%>
 <%=request.getRequestURL()%>
-
+<br>
+<a href="/index.jsp">返回首页💗</a>
 </body>
 </html>

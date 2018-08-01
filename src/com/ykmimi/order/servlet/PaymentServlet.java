@@ -8,10 +8,7 @@ import com.ykmimi.order.service.OrdersService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 /*
 付款Ser
@@ -26,18 +23,21 @@ public class PaymentServlet extends HttpServlet {
 
         System.out.println("get in PaymentServlet");
 
-        //* 获取Cookie
+//        //* 获取Cookie
+//        long cid = 0;
+//        Cookie[] cs = request.getCookies();
+//        if(cs.length>0){
+//            for(Cookie c : cs){
+//                if(c.getName().equals("cidCookie")){
+//                    //获取Cookie中的customer_id
+//                    cid = Long.parseLong(c.getValue());
+//                    break;
+//                }
+//            }
+//        }
+        HttpSession session = request.getSession(false);
         long cid = 0;
-        Cookie[] cs = request.getCookies();
-        if(cs.length>0){
-            for(Cookie c : cs){
-                if(c.getName().equals("cidCookie")){
-                    //获取Cookie中的customer_id
-                    cid = Long.parseLong(c.getValue());
-                    break;
-                }
-            }
-        }
+        cid = (long)session.getAttribute("cid");
         if(cid>0){//如果用户id存在则创建新购物车元组数据并返回long型cart_id
             //查询cid的用户实例
             AuthService as = new AuthService();
@@ -62,8 +62,10 @@ public class PaymentServlet extends HttpServlet {
                 request.setAttribute("showOrder",showOrder);
                 RequestDispatcher rd = request.getRequestDispatcher("/paymentSuccess.jsp");
                 rd.forward(request,response);
-            }else if(payState==0){
+            }else if(payState==-2){//事务回滚后返回-2
                 request.getRequestDispatcher("/paymentFails.jsp").forward(request,response);
+            }else if(payState==0){
+
             }
         }
 

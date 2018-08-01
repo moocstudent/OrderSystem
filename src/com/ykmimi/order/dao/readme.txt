@@ -5,3 +5,5 @@ AuthDao中暂时只有Customers的登陆注册.
 AutoDao作为用户的信息有效性验证,(注册,登陆)的Dao层
 
 MerchantersDao作为商家的信息有效性验证,(注册,登陆)的Dao层.
+
+1.如果方法过多的话再分拆方法到其他的类中

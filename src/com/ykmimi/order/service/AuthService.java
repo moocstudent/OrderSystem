@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.ykmimi.order.dao.AuthDao;
 import com.ykmimi.order.entity.Customers;
@@ -60,7 +61,7 @@ public class AuthService {
             conn.commit();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            if(conn!=null){
+            if (conn != null) {
                 try {
                     conn.rollback();
                     return -1;
@@ -76,8 +77,94 @@ public class AuthService {
 
     }/////* End registerNewCustomer
 
+    /////* 用户充值方法,返回1为更改金额成功,0为失败,-4为钱数是0
+    public double[] rechargeBalance(long customerID, double money) {
+        double[] queryStateAndMoney = new double[2];
+        queryStateAndMoney[0]=0;
+        queryStateAndMoney[1]=0;
+        if(money==0){
+            return queryStateAndMoney;//*如果有可能出现充值0元,则返回状态码-4
+        }
+
+        int insertState = 0;
+        Connection conn = null;
+        try {
+            conn = JDBCUtil.getConnection();
+            conn.setAutoCommit(false);
+            insertState = ad.changeBalance(customerID, money);
+            queryStateAndMoney = ad.queryBalanceByID(customerID);
+            conn.commit();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            if (conn!=null){
+                try {
+                    conn.rollback();
+                    queryStateAndMoney[0]=-4;
+                    return queryStateAndMoney;
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        } finally {
+        }
+        if (insertState==0){
+            return null;
+        }
+        return queryStateAndMoney;
+    }//* End RechargeBalance
 
 
+    /////* 用户更新数据,
+    public int[] changeUserInfoByInputData(long cid,ArrayList<Object> changeUserData){
 
+        //changeUserData这个Array的各个下标的代表为:
+        //下标0: 用户实名是否更改,更改为实名(String),不更改为"0"(String)
+        //下标1: 用户地址是否更改,更改为地址(String),不更改为"0"(String)
+        //下标2: 用户电话是否更改,更改为电话(long),  不更改为"0"(String)
+        System.out.println("进入changeUserInfoByInputData");
+        /////
+        //下标0: 用户实名是否更改,更改为实名(String),不更改为0(int)
+        int trueNameState = 0;
+        if(!(((String)changeUserData.get(0)).equals("0"))){
+            try {
+                System.out.println("进入了truename的更改service");
+                trueNameState = ad.updataTruenameByID(cid,(String)changeUserData.get(0));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        //下标1: 用户地址是否更改,更改为地址(String),不更改为"0"(String)
+        int addressState = 0;
+        if (!(((String)changeUserData.get(1)).equals("0"))){
+            try {
+                System.out.println("进入了地址更改的service");
+                addressState = ad.updataAddressByID(cid,(String)changeUserData.get(1));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        //下标2: 用户电话是否更改,更改为电话(long),  不更改为"0"(String)
+        int phoneState = 0;
+        if (!(((String)changeUserData.get(2)).equals("0"))){
+            try {
+                System.out.println("进入了phone的更改service");
+                long phone = Long.parseLong(changeUserData.get(2)+"");
+                phoneState = ad.updataPhoneByID(cid,phone);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        int[] updateState = new int[3];
+        updateState[0] = trueNameState;
+        updateState[1] = addressState;
+        updateState[2] = phoneState;
+        return updateState;
+    }
 
 }

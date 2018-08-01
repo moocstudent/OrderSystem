@@ -88,4 +88,24 @@
         <servlet-name>paymentServlet</servlet-name>
         <url-pattern>/pay</url-pattern>
     </servlet-mapping>
+
+    <!--rechargeServlet-->
+    <servlet>
+        <servlet-name>rechargeServlet</servlet-name>
+        <servlet-class>com.ykmimi.order.servlet.RechargeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rechargeServlet</servlet-name>
+        <url-pattern>/recharge</url-pattern>
+    </servlet-mapping>
+
+    <!--changeDataServlet-->
+    <servlet>
+        <servlet-name>changeDataServlet</servlet-name>
+        <servlet-class>com.ykmimi.order.servlet.ChangeDataServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>changeDataServlet</servlet-name>
+        <url-pattern>/changeData</url-pattern>
+    </servlet-mapping>
 </web-app>
